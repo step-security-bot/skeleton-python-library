@@ -37,15 +37,15 @@ jobs:
       # each job.
       - id: harden-runner
         name: Harden the runner
-        uses: step-security/harden-runner@v2
+        uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
         with:
           egress-policy: audit
       - id: github-status
         name: Check GitHub status
-        uses: crazy-max/ghaction-github-status@v4
+        uses: crazy-max/ghaction-github-status@6aadd1a8de5ca43c8e17a0633ef90e2178da5228 # v4.1.0
       - id: dump-context
         name: Dump context
-        uses: crazy-max/ghaction-dump-context@v2
+        uses: crazy-max/ghaction-dump-context@5355a8e5e6ac5a302e746a1c4b7747a0393863c8 # v2.3.0
   lint:
     needs:
       - diagnostics
@@ -53,20 +53,20 @@ jobs:
     steps:
       - id: harden-runner
         name: Harden the runner
-        uses: step-security/harden-runner@v2
+        uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
         with:
           egress-policy: audit
       - id: setup-env
-        uses: cisagov/setup-env-github-action@develop
-      - uses: actions/checkout@v4
+        uses: cisagov/setup-env-github-action@08d5b22c9cdd147e3a2d646d9d5b74152c510fdd # develop
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - id: setup-python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
         with:
           python-version: ${{ steps.setup-env.outputs.python-version }}
       # We need the Go version and Go cache location for the actions/cache step,
       # so the Go installation must happen before that.
       - id: setup-go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5.1.0
         with:
           # There is no expectation for actual Go code so we disable caching as
           # it relies on the existence of a go.sum file.
@@ -76,7 +76,7 @@ jobs:
         name: Lookup Go cache directory
         run: |
           echo "dir=$(go env GOCACHE)" >> $GITHUB_OUTPUT
-      - uses: actions/cache@v3
+      - uses: actions/cache@e12d46a63a90f2fae62d114769bbf2a179198b5c # v3.3.3
         env:
           BASE_CACHE_KEY: "${{ github.job }}-${{ runner.os }}-\
             py${{ steps.setup-python.outputs.python-version }}-\
@@ -120,7 +120,7 @@ jobs:
             ${{ env.CURL_CACHE_DIR }}/"${PACKER_ZIP}"
           sudo mv /usr/local/bin/packer /usr/local/bin/packer-default
           sudo ln -s /opt/packer/packer /usr/local/bin/packer
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
         with:
           terraform_version: ${{ steps.setup-env.outputs.terraform-version }}
       - name: Install go-critic
@@ -169,7 +169,7 @@ jobs:
       - name: Run pre-commit on all files
         run: pre-commit run --all-files
       - name: Setup tmate debug session
-        uses: mxschmitt/action-tmate@v3
+        uses: mxschmitt/action-tmate@a283f9441d2d96eb62436dc46d7014f5d357ac22 # v3.17
         if: env.RUN_TMATE
   test:
     name: test source - py${{ matrix.python-version }}
@@ -189,15 +189,15 @@ jobs:
     steps:
       - id: harden-runner
         name: Harden the runner
-        uses: step-security/harden-runner@v2
+        uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
         with:
           egress-policy: audit
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - id: setup-python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
         with:
           python-version: ${{ matrix.python-version }}
-      - uses: actions/cache@v3
+      - uses: actions/cache@e12d46a63a90f2fae62d114769bbf2a179198b5c # v3.3.3
         env:
           BASE_CACHE_KEY: "${{ github.job }}-${{ runner.os }}-\
             py${{ steps.setup-python.outputs.python-version }}-"
@@ -229,7 +229,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: success()
       - name: Setup tmate debug session
-        uses: mxschmitt/action-tmate@v3
+        uses: mxschmitt/action-tmate@a283f9441d2d96eb62436dc46d7014f5d357ac22 # v3.17
         if: env.RUN_TMATE
   coveralls-finish:
     runs-on: ubuntu-latest
@@ -239,17 +239,17 @@ jobs:
     steps:
       - id: harden-runner
         name: Harden the runner
-        uses: step-security/harden-runner@v2
+        uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
         with:
           egress-policy: audit
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - id: setup-env
-        uses: cisagov/setup-env-github-action@develop
+        uses: cisagov/setup-env-github-action@08d5b22c9cdd147e3a2d646d9d5b74152c510fdd # develop
       - id: setup-python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
         with:
           python-version: ${{ steps.setup-env.outputs.python-version }}
-      - uses: actions/cache@v3
+      - uses: actions/cache@e12d46a63a90f2fae62d114769bbf2a179198b5c # v3.3.3
         env:
           BASE_CACHE_KEY: "${{ github.job }}-${{ runner.os }}-\
             py${{ steps.setup-python.outputs.python-version }}-"
@@ -273,7 +273,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup tmate debug session
-        uses: mxschmitt/action-tmate@v3
+        uses: mxschmitt/action-tmate@a283f9441d2d96eb62436dc46d7014f5d357ac22 # v3.17
         if: env.RUN_TMATE
   build:
     name: build wheel - py${{ matrix.python-version }}
@@ -295,15 +295,15 @@ jobs:
     steps:
       - id: harden-runner
         name: Harden the runner
-        uses: step-security/harden-runner@v2
+        uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
         with:
           egress-policy: audit
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - id: setup-python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
         with:
           python-version: ${{ matrix.python-version }}
-      - uses: actions/cache@v3
+      - uses: actions/cache@e12d46a63a90f2fae62d114769bbf2a179198b5c # v3.3.3
         env:
           BASE_CACHE_KEY: "${{ github.job }}-${{ runner.os }}-\
             py${{ steps.setup-python.outputs.python-version }}-"
@@ -324,12 +324,12 @@ jobs:
       - name: Build artifacts
         run: python -m build
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
         with:
           name: dist-${{ matrix.python-version }}
           path: dist
       - name: Setup tmate debug session
-        uses: mxschmitt/action-tmate@v3
+        uses: mxschmitt/action-tmate@a283f9441d2d96eb62436dc46d7014f5d357ac22 # v3.17
         if: env.RUN_TMATE
   test-build:
     name: test built wheel - py${{ matrix.python-version }}
@@ -350,15 +350,15 @@ jobs:
     steps:
       - id: harden-runner
         name: Harden the runner
-        uses: step-security/harden-runner@v2
+        uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
         with:
           egress-policy: audit
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - id: setup-python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
         with:
           python-version: ${{ matrix.python-version }}
-      - uses: actions/cache@v3
+      - uses: actions/cache@e12d46a63a90f2fae62d114769bbf2a179198b5c # v3.3.3
         env:
           BASE_CACHE_KEY: "${{ github.job }}-${{ runner.os }}-\
             py${{ steps.setup-python.outputs.python-version }}-"
@@ -373,7 +373,7 @@ jobs:
           restore-keys: |
             ${{ env.BASE_CACHE_KEY }}
       - name: Retrieve the built wheel
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         with:
           name: dist-${{ matrix.python-version }}
           path: dist
@@ -389,5 +389,5 @@ jobs:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: pytest
       - name: Setup tmate debug session
-        uses: mxschmitt/action-tmate@v3
+        uses: mxschmitt/action-tmate@a283f9441d2d96eb62436dc46d7014f5d357ac22 # v3.17
         if: env.RUN_TMATE
